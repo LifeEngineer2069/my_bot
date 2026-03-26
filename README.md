@@ -1,5 +1,7 @@
 ## ROS Robot Package for Cyber Waster 
 
+
+#start up commands to bring up axis locations and shape of robot
 cd dev_ws
 
 colcon build --symlink-install
