@@ -4,9 +4,24 @@
     <joint name="laser_joint" type="fixed">
         <parent link="chassis"/>
         <child link="laser_frame"/>
-        <origin xyz="0.1 0 0.175" rpy="0 0 0"/>
+        <origin xyz="0.15 0 0.1" rpy="0 0 0"/>
     </joint>
 
-
+    <link name="laser_frame">
+        <visual>
+            <geometry>
+                <cylinder radius="0.05" length="0.04"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.05" length="0.04"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_cylinder mass="0.1" length="0.0334" radius="0.0425">
+            <origin xyz="0.15 0 .1" rpy="0 0 0"/>
+        </xacro:inertial_cylinder>
+    </link>
 
 </robot>
