@@ -6,16 +6,12 @@ cd dev_ws
 
 colcon build --symlink-install
 
-ros2 launch my_bot rsp.launch.py
-
-ros2 launch my_bot rsp.launch.py
+ros2 launch my_bot rsp.launch.py use_sim_time:=true
 
 ros2 run joint_state_publisher_gui joint_state_publisher_gui
 
+ros2 launch ros_gz_sim gz_sim.launch.py gz_args:="-r /home/ros/dev_ws/my_bot/worlds/my_world.sdf --render-engine ogre"
 
-others
-ros2 launch my_bot rsp.launch.py use_sim_time:=true
-ros2 launch gazebo_ros gazebo.launch.py
-ros2 run gazebo_ros spawn_entity.py -topic robot_description -entity cyberwaster
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
 

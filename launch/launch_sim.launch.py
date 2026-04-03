@@ -14,7 +14,7 @@ def generate_launch_description():
     # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
     package_name='my_bot' #<--- Robot Name
 
-    world_file = os.path.join(get_package_share_directory(package_name), 'worlds', 'my_world.sdf')
+    world_file = os.path.join(get_package_share_directory(package_name), 'worlds', 'empty.sdf')
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
@@ -22,12 +22,18 @@ def generate_launch_description():
                 )]), launch_arguments={'use_sim_time': 'true'}.items()
     )
 
-    # Include the Gazebo launch file, provided by the ros_gz_sim package (Ignition Gazebo)
-    # --render-engine ogre uses OGRE1 instead of OGRE2 (more compatible with Jetson)
-    gazebo = IncludeLaunchDescription(
+    # Gazebo server — physics + sensors, headless (no window = no Jetson crash)
+    gazebo_server = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')]),
-                launch_arguments={'gz_args': '-r ' + world_file + ' --render-engine ogre'}.items(),
+                launch_arguments={'gz_args': '-r -s ' + world_file}.items(),
+             )
+
+    # Gazebo GUI — connects to running server, uses OGRE1 to avoid Jetson crash
+    gazebo_gui = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([os.path.join(
+                    get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')]),
+                launch_arguments={'gz_args': '-g --render-engine ogre'}.items(),
              )
 
     # Spawn the robot entity using ros_gz_sim
@@ -36,23 +42,32 @@ def generate_launch_description():
                                    '-topic', 'robot_description'],
                         output='screen')
 
-    # Bridge ROS 2 <-> Ignition topics
+    # Bridge ROS 2 <-> Ignition topics (/tf is NOT bridged — odom_to_tf handles it)
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
         arguments=[
+            '/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock',
             '/cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist',
-            '/odom@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
-            '/tf@tf2_msgs/msg/TFMessage@ignition.msgs.Pose_V',
-            '/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
+            '/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
+            '/scan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
         ],
+        output='screen'
+    )
+
+    # Publish odom -> base_link TF from /odom topic (avoids bridge latency/TF_OLD_DATA)
+    odom_to_tf = Node(
+        package='my_bot',
+        executable='odom_to_tf.py',
         output='screen'
     )
 
     # Launch them all!
     return LaunchDescription([
         rsp,
-        gazebo,
+        gazebo_server,
+        gazebo_gui,
         spawn_entity,
         bridge,
+        odom_to_tf,
     ])
