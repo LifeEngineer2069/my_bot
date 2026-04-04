@@ -42,20 +42,20 @@
     <!-- Chassis -->
     <link name="chassis">
         <visual>
-            <origin xyz="0.125 0 0.0625"/>
+            <origin xyz="0 0 0.0625"/>
             <geometry>
                 <box size="0.25 0.25 0.045"/>
             </geometry>
             <material name="blue"/>
         </visual>
         <collision>
-            <origin xyz="0.125 0 0.0625"/>
+            <origin xyz="0 0 0.0625"/>
             <geometry>
                 <box size="0.25 0.25 0.045"/>
             </geometry>
         </collision>
         <xacro:inertial_box mass="0.5" x="0.25" y="0.25" z="0.045">
-            <origin xyz="0.125 0 0.0625" rpy="0 0 0"/>
+            <origin xyz="0 0 0.0625" rpy="0 0 0"/>
         </xacro:inertial_box>
     </link>
 
@@ -63,7 +63,7 @@
     <joint name="left_wheel_joint" type="continuous">
         <parent link="base_link"/>
         <child link="left_wheel"/>
-        <origin xyz="0.125 0.142 0.0425" rpy="-${pi/2} 0 0"/>
+        <origin xyz="0 0.142 0.0425" rpy="-${pi/2} 0 0"/>
         <axis xyz="0 0 -1"/>
     </joint>
     <link name="left_wheel">
@@ -87,7 +87,7 @@
     <joint name="right_wheel_joint" type="continuous">
         <parent link="base_link"/>
         <child link="right_wheel"/>
-        <origin xyz="0.125 -0.142 0.0425" rpy="${pi/2} 0 0"/>
+        <origin xyz="0 -0.142 0.0425" rpy="${pi/2} 0 0"/>
         <axis xyz="0 0 1"/>
     </joint>
     <link name="right_wheel">
@@ -133,7 +133,7 @@
     <joint name="caster_wheel_1_joint" type="fixed">
     <parent link="chassis"/>
     <child link="caster_wheel_1"/>
-    <origin xyz="0.23 0.1 0.02" rpy="0 0 0"/>
+    <origin xyz="0.105 0.1 0.02" rpy="0 0 0"/>
     </joint>
 
     <link name="caster_wheel_1">
@@ -157,7 +157,7 @@
     <joint name="caster_wheel_2_joint" type="fixed">
     <parent link="chassis"/>
     <child link="caster_wheel_2"/>
-    <origin xyz="0.23 -0.1 0.02" rpy="${pi/2} 0 0"/>
+    <origin xyz="0.105 -0.1 0.02" rpy="${pi/2} 0 0"/>
     </joint>
 
     <link name="caster_wheel_2">
@@ -181,7 +181,7 @@
 <joint name="caster_wheel_3_joint" type="fixed">
     <parent link="chassis"/>
     <child link="caster_wheel_3"/>
-    <origin xyz="0.02 0.1 0.02" rpy="0 0 0"/>
+    <origin xyz="-0.105 0.1 0.02" rpy="0 0 0"/>
 </joint>
 
 <link name="caster_wheel_3">
@@ -205,7 +205,7 @@
 <joint name="caster_wheel_4_joint" type="fixed">
     <parent link="chassis"/>
     <child link="caster_wheel_4"/>
-    <origin xyz="0.02 -0.1 0.02" rpy="${pi/2} 0 0"/>
+    <origin xyz="-0.105 -0.1 0.02" rpy="${pi/2} 0 0"/>
 </joint>
 
 <link name="caster_wheel_4">
