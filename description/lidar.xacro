@@ -4,7 +4,7 @@
     <joint name="laser_joint" type="fixed">
         <parent link="chassis"/>
         <child link="laser_frame"/>
-        <origin xyz="0.1 0 0.1045" rpy="0 0 0"/>
+        <origin xyz="0.15 0 0.1" rpy="0 0 0"/>
     </joint>
 
     <link name="laser_frame">
@@ -29,7 +29,7 @@
     <gazebo reference="laser_frame">
         <sensor name="laser" type="gpu_lidar">
             <topic>scan</topic>
-            <update_rate>1</update_rate>
+            <update_rate>5</update_rate>
             <lidar>
                 <scan>
                     <horizontal>

@@ -171,7 +171,7 @@ Visualization Manager:
       Axis: Z
       Channel Name: intensity
       Class: rviz_default_plugins/LaserScan
-      Color: 255; 255; 255
+      Color: 255; 0; 0
       Color Transformer: ""
       Decay Time: 0
       Enabled: true
@@ -184,7 +184,7 @@ Visualization Manager:
       Position Transformer: ""
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.009999999776482582
+      Size (m): 0.05
       Style: Flat Squares
       Topic:
         Depth: 5
@@ -194,7 +194,7 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /scan
       Use Fixed Frame: true
-      Use rainbow: true
+      Use rainbow: false
       Value: true
   Enabled: true
   Global Options:

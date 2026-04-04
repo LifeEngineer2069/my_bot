@@ -15,3 +15,7 @@ ros2 launch ros_gz_sim gz_sim.launch.py gz_args:="-r /home/ros/dev_ws/my_bot/wor
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
 ros2 topic echo /scan --field ranges --once
+
+# Real robot with D500 LiDAR (STL-19P)
+sudo chmod 666 /dev/ttyUSB0
+ros2 launch my_bot launch_robot.launch.py

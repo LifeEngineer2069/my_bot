@@ -29,13 +29,6 @@ def generate_launch_description():
                 launch_arguments={'gz_args': '-r -s ' + world_file}.items(),
              )
 
-    # Gazebo GUI — connects to running server, uses OGRE1 to avoid Jetson crash
-    gazebo_gui = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')]),
-                launch_arguments={'gz_args': '-g --render-engine ogre'}.items(),
-             )
-
     # Spawn the robot entity using ros_gz_sim
     spawn_entity = Node(package='ros_gz_sim', executable='create',
                         arguments=['-name', 'my_bot',
@@ -59,6 +52,7 @@ def generate_launch_description():
     odom_to_tf = Node(
         package='my_bot',
         executable='odom_to_tf.py',
+        parameters=[{'use_sim_time': True}],
         output='screen'
     )
 
@@ -66,7 +60,6 @@ def generate_launch_description():
     return LaunchDescription([
         rsp,
         gazebo_server,
-        gazebo_gui,
         spawn_entity,
         bridge,
         odom_to_tf,
