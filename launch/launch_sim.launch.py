@@ -3,39 +3,52 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, TimerAction, OpaqueFunction, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
 
 from launch_ros.actions import Node
 
 
-def generate_launch_description():
+def launch_setup(context, *args, **kwargs):
 
-    # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
-    package_name='my_bot' #<--- Robot Name
+    package_name = 'my_bot'
 
-    world_file = os.path.join(get_package_share_directory(package_name), 'worlds', 'empty.sdf')
+    world_name = LaunchConfiguration('world').perform(context)
+    world_file = os.path.join(
+        get_package_share_directory(package_name), 'worlds', world_name + '.sdf'
+    )
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory(package_name),'launch','rsp.launch.py'
+                    get_package_share_directory(package_name), 'launch', 'rsp.launch.py'
                 )]), launch_arguments={'use_sim_time': 'true'}.items()
     )
 
-    # Gazebo server — physics + sensors, headless (no window = no Jetson crash)
-    gazebo_server = IncludeLaunchDescription(
+    # Single combined Gazebo process — ogre (not ogre2) avoids NvMapMemAlloc crash on Jetson
+    gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')]),
-                launch_arguments={'gz_args': '-r -s ' + world_file}.items(),
+                launch_arguments={'gz_args': '-r --render-engine ogre ' + world_file}.items(),
              )
 
-    # Spawn the robot entity using ros_gz_sim
+    # RViz
+    rviz = Node(
+        package='rviz2',
+        executable='rviz2',
+        arguments=['-d', os.path.join(get_package_share_directory(package_name), 'config', 'view_bot.rviz')],
+        parameters=[{'use_sim_time': True}],
+        output='screen'
+    )
+
+    # Spawn the robot entity
     spawn_entity = Node(package='ros_gz_sim', executable='create',
                         arguments=['-name', 'my_bot',
-                                   '-topic', 'robot_description'],
+                                   '-topic', '/robot_description',
+                                   '-x', '0.0', '-y', '0.0', '-z', '0.1'],
                         output='screen')
 
-    # Bridge ROS 2 <-> Ignition topics (/tf is NOT bridged — odom_to_tf handles it)
+    # Bridge ROS 2 <-> Ignition topics
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
@@ -44,11 +57,13 @@ def generate_launch_description():
             '/cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist',
             '/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
             '/scan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
+            '/camera@sensor_msgs/msg/Image[ignition.msgs.Image',
+            '/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo',
         ],
         output='screen'
     )
 
-    # Publish odom -> base_link TF from /odom topic (avoids bridge latency/TF_OLD_DATA)
+    # Publish odom -> base_link TF
     odom_to_tf = Node(
         package='my_bot',
         executable='odom_to_tf.py',
@@ -56,11 +71,25 @@ def generate_launch_description():
         output='screen'
     )
 
-    # Launch them all!
-    return LaunchDescription([
+    # Delay spawn so world finishes loading first
+    spawn_entity_delayed = TimerAction(period=3.0, actions=[spawn_entity])
+
+    return [
         rsp,
-        gazebo_server,
-        spawn_entity,
+        gazebo,
+        rviz,
+        spawn_entity_delayed,
         bridge,
         odom_to_tf,
+    ]
+
+
+def generate_launch_description():
+    return LaunchDescription([
+        DeclareLaunchArgument(
+            'world',
+            default_value='test_arena',
+            description='World to load (test_arena, empty, project_map1, project_map2, project_map3, my_world)'
+        ),
+        OpaqueFunction(function=launch_setup),
     ])

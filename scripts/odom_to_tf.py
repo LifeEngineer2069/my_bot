@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
+from rclpy.time import Time
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import TransformStamped
 from tf2_ros import TransformBroadcaster
@@ -13,6 +14,12 @@ class OdomToTF(Node):
         self.create_subscription(Odometry, '/odom', self.odom_callback, 10)
 
     def odom_callback(self, msg):
+        msg_time = Time.from_msg(msg.header.stamp)
+        now = self.get_clock().now()
+        age_sec = (now - msg_time).nanoseconds / 1e9
+        if age_sec > 0.5:
+            return
+
         t = TransformStamped()
         t.header.stamp = msg.header.stamp
         t.header.frame_id = 'odom'

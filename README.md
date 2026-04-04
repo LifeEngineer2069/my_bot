@@ -1,21 +1,53 @@
-## ROS Robot Package for Cyber Waster 
+## ROS Robot Package for Cyber Waster
 
+---
 
-#start up commands to bring up axis locations and shape of robot
-cd dev_ws
+## Cheat Sheet
 
+### Build
+Compile the package and make changes take effect.
+```bash
+cd ~/dev_ws
 colcon build --symlink-install
+source install/setup.bash
+```
 
-ros2 launch my_bot rsp.launch.py use_sim_time:=true
+### Simulation
+Launch Gazebo, spawn the robot, start the ROS-Gazebo bridge, and open RViz — all in one command.
+```bash
+ros2 launch my_bot launch_sim.launch.py
 
-ros2 run joint_state_publisher_gui joint_state_publisher_gui
+# Pick a world
+ros2 launch my_bot launch_sim.launch.py world:=test_arena
+ros2 launch my_bot launch_sim.launch.py world:=project_map1
+ros2 launch my_bot launch_sim.launch.py world:=project_map2
+ros2 launch my_bot launch_sim.launch.py world:=project_map3
+```
 
-ros2 launch ros_gz_sim gz_sim.launch.py gz_args:="-r /home/ros/dev_ws/my_bot/worlds/my_world.sdf --render-engine ogre"
-
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
-
-ros2 topic echo /scan --field ranges --once
-
-# Real robot with D500 LiDAR (STL-19P)
+### Real Robot
+Run on physical hardware with the D500 LiDAR connected via USB.
+```bash
 sudo chmod 666 /dev/ttyUSB0
 ros2 launch my_bot launch_robot.launch.py
+```
+
+### Teleop
+Drive the robot manually from the keyboard.
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+
+### Debug
+Useful one-off commands for checking individual parts of the system.
+```bash
+# Check lidar is publishing
+ros2 topic echo /scan --field ranges --once
+
+# Visualise robot model only (no sim)
+ros2 launch my_bot rsp.launch.py use_sim_time:=true
+ros2 run joint_state_publisher_gui joint_state_publisher_gui
+```
+
+---
+
+Worlds are in `my_bot/worlds/`.

@@ -1,0 +1,170 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <world name="test_arena">
+
+    <!-- Required system plugins -->
+    <plugin filename="ignition-gazebo-physics-system"
+            name="ignition::gazebo::systems::Physics"/>
+    <plugin filename="ignition-gazebo-user-commands-system"
+            name="ignition::gazebo::systems::UserCommands"/>
+    <plugin filename="ignition-gazebo-scene-broadcaster-system"
+            name="ignition::gazebo::systems::SceneBroadcaster"/>
+    <plugin filename="ignition-gazebo-sensors-system"
+            name="ignition::gazebo::systems::Sensors">
+      <!-- ogre2 for lidar on server side — safe on Jetson headless -->
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <!-- Sun -->
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- Ground plane — 12x12 m -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="surface">
+          <geometry>
+            <plane><normal>0 0 1</normal><size>12 12</size></plane>
+          </geometry>
+        </collision>
+        <visual name="surface">
+          <geometry>
+            <plane><normal>0 0 1</normal><size>12 12</size></plane>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== Arena walls — 10x10 m interior ===== -->
+
+    <!-- North wall -->
+    <model name="wall_north">
+      <static>true</static>
+      <pose>0 5.15 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>10.3 0.3 0.5</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>10.3 0.3 0.5</size></box></geometry>
+          <material><ambient>0.4 0.4 0.8 1</ambient><diffuse>0.4 0.4 0.8 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- South wall -->
+    <model name="wall_south">
+      <static>true</static>
+      <pose>0 -5.15 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>10.3 0.3 0.5</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>10.3 0.3 0.5</size></box></geometry>
+          <material><ambient>0.4 0.4 0.8 1</ambient><diffuse>0.4 0.4 0.8 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- East wall -->
+    <model name="wall_east">
+      <static>true</static>
+      <pose>5.15 0 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.3 10.3 0.5</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>0.3 10.3 0.5</size></box></geometry>
+          <material><ambient>0.4 0.4 0.8 1</ambient><diffuse>0.4 0.4 0.8 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- West wall -->
+    <model name="wall_west">
+      <static>true</static>
+      <pose>-5.15 0 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.3 10.3 0.5</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>0.3 10.3 0.5</size></box></geometry>
+          <material><ambient>0.4 0.4 0.8 1</ambient><diffuse>0.4 0.4 0.8 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== Interior obstacles ===== -->
+
+    <!-- Centre pillar -->
+    <model name="pillar_centre">
+      <static>true</static>
+      <pose>0 0 0.4 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.4 0.4 0.8</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>0.4 0.4 0.8</size></box></geometry>
+          <material><ambient>0.8 0.3 0.3 1</ambient><diffuse>0.8 0.3 0.3 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Box NE -->
+    <model name="box_ne">
+      <static>true</static>
+      <pose>2.5 2.5 0.3 0 0 0.4</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.5 0.5 0.6</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>0.5 0.5 0.6</size></box></geometry>
+          <material><ambient>0.3 0.8 0.3 1</ambient><diffuse>0.3 0.8 0.3 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Box SW -->
+    <model name="box_sw">
+      <static>true</static>
+      <pose>-2.5 -2.5 0.3 0 0 0.8</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.5 0.5 0.6</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>0.5 0.5 0.6</size></box></geometry>
+          <material><ambient>0.3 0.8 0.3 1</ambient><diffuse>0.3 0.8 0.3 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Box NW -->
+    <model name="box_nw">
+      <static>true</static>
+      <pose>-2.5 2.5 0.3 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.5 0.5 0.6</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>0.5 0.5 0.6</size></box></geometry>
+          <material><ambient>0.8 0.8 0.3 1</ambient><diffuse>0.8 0.8 0.3 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Box SE -->
+    <model name="box_se">
+      <static>true</static>
+      <pose>2.5 -2.5 0.3 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.5 0.5 0.6</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>0.5 0.5 0.6</size></box></geometry>
+          <material><ambient>0.8 0.8 0.3 1</ambient><diffuse>0.8 0.8 0.3 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>
