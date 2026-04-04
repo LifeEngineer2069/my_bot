@@ -22,6 +22,9 @@ ros2 launch my_bot launch_sim.launch.py world:=test_arena
 ros2 launch my_bot launch_sim.launch.py world:=project_map1
 ros2 launch my_bot launch_sim.launch.py world:=project_map2
 ros2 launch my_bot launch_sim.launch.py world:=project_map3
+
+#Control the Robot
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
 ### Real Robot
@@ -32,9 +35,12 @@ ros2 launch my_bot launch_robot.launch.py
 ```
 
 ### Teleop
-Drive the robot manually from the keyboard.
+Drive the robot manually from the keyboard. Open RViz alongside to monitor the robot.
 ```bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
+
+# Open RViz with the robot config (works on any machine)
+rviz2 -d $(ros2 pkg prefix my_bot)/share/my_bot/config/view_bot.rviz
 ```
 
 ### Debug
@@ -46,6 +52,7 @@ ros2 topic echo /scan --field ranges --once
 # Visualise robot model only (no sim)
 ros2 launch my_bot rsp.launch.py use_sim_time:=true
 ros2 run joint_state_publisher_gui joint_state_publisher_gui
+rviz2 -d $(ros2 pkg prefix my_bot)/share/my_bot/config/view_bot.rviz
 ```
 
 ---
