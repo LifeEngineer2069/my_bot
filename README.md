@@ -57,6 +57,10 @@ ros2 run rqt_image_view rqt_image_view
 ### Debug
 Useful one-off commands for checking individual parts of the system.
 ```bash
+# Check input devices (joystick, gamepad, etc.)
+evtest
+jstest-gtk
+
 # Check lidar is publishing
 ros2 topic echo /scan --field ranges --once
 

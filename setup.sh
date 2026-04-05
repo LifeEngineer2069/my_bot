@@ -7,3 +7,6 @@ sudo apt install -y \
     ros-humble-joint-state-publisher-gui \
     ros-humble-image-transport-plugins \
     ros-humble-rqt-image-view
+
+sudo apt install -y joystick jstest-gtk evtest ros-humble-joy
+    
