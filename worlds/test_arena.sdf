@@ -481,11 +481,7 @@
       </link>
       <self_collide>false</self_collide>
     </model>
-    <include>
-      <uri>file://<urdf-string></uri>
-      <name>my_bot</name>
-      <pose>0.014435 0.000308 -0 0 2e-06 -0.010464</pose>
-    </include>
+
     <light name='sun' type='directional'>
       <pose>0 0 10 0 -0 0</pose>
       <cast_shadows>true</cast_shadows>

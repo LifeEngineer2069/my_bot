@@ -2,6 +2,14 @@
 
 ---
 
+## Setup
+Install all dependencies on a fresh machine.
+```bash
+bash ~/dev_ws/my_bot/setup.sh
+```
+
+---
+
 ## Cheat Sheet
 
 ### Build
@@ -22,9 +30,6 @@ ros2 launch my_bot launch_sim.launch.py world:=test_arena
 ros2 launch my_bot launch_sim.launch.py world:=project_map1
 ros2 launch my_bot launch_sim.launch.py world:=project_map2
 ros2 launch my_bot launch_sim.launch.py world:=project_map3
-
-#Control the Robot
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
 ### Real Robot
@@ -41,6 +46,12 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
 # Open RViz with the robot config (works on any machine)
 rviz2 -d $(ros2 pkg prefix my_bot)/share/my_bot/config/view_bot.rviz
+```
+
+### Camera View
+View the robot's camera feed using rqt.
+```bash
+ros2 run rqt_image_view rqt_image_view
 ```
 
 ### Debug
