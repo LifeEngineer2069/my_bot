@@ -31,7 +31,7 @@ ros2 launch my_bot launch_sim.launch.py world:=project_map1
 ros2 launch my_bot launch_sim.launch.py world:=project_map2
 ros2 launch my_bot launch_sim.launch.py world:=project_map3
 ```
-
+ 
 ### Real Robot
 Run on physical hardware with the D500 LiDAR connected via USB.
 ```bash
