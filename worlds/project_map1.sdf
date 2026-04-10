@@ -12,7 +12,7 @@
             name="ignition::gazebo::systems::SceneBroadcaster"/>
     <plugin filename="ignition-gazebo-sensors-system"
             name="ignition::gazebo::systems::Sensors">
-      <render_engine>ogre2</render_engine>
+      <render_engine>ogre</render_engine>
     </plugin>
 
     <!-----Sun Light----->
@@ -250,70 +250,60 @@
 
     <!----------Map Obstacles---------->
 
-    <model name="map_obstacles">
+    <!-----First Box from Fuel Website----->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/QCforward/models/carboard box</uri>
+      <pose>-4.0 3.5 0.20 0 0 0</pose>
+      <name>box1</name>
+    </include>
 
-      <!-----First Box from Fuel Website----->
-      <include>
-        <uri>https://fuel.gazebosim.org/1.0/QCforward/models/carboard box</uri>
-        <pose>-4.0 3.5 0.20 0 0 0</pose>
-        <name>box1</name>
-      </include>
+    <!-----Second Box from Fuel Website----->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/QCforward/models/carboard box</uri>
+      <pose>-4.0 4.2 0.20 0 0 0</pose>
+      <name>box2</name>
+    </include>
 
+    <!-----Cabinet from Fuel Website----->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/MetalCabinet</uri>
+      <pose>-2.5 4.2 0.05 0 0 0</pose>
+      <name>cabinet</name>
+    </include>
 
-      <!-----Second Box from Fuel Website----->
-      <include>
-        <uri>https://fuel.gazebosim.org/1.0/QCforward/models/carboard box</uri>
-        <pose>-4.0 4.2 0.20 0 0 0</pose>
-        <name>box2</name>
-      </include>
+    <!-----First Shelf from Fuel Website----->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/SquareShelf</uri>
+      <pose>-2.4 -4.0 0.05 0 0 -1.5708</pose>
+      <name>shelf1</name>
+    </include>
 
+    <!-----Second Shelf from Fuel Website----->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/SquareShelf</uri>
+      <pose>-2.4 -3.2 0.05 0 0 -1.5708</pose>
+      <name>shelf2</name>
+    </include>
 
-      <!-----Cabinet from Fuel Website----->
-      <include>
-        <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/MetalCabinet</uri>
-        <pose>-2.5 4.2 0.05 0 0 0</pose>
-        <name>cabinet</name>
-      </include>
+    <!-----Mailbox from Fuel Website----->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Mailbox</uri>
+      <pose>3.8 3.8 0.05 0 0 -1.5708</pose>
+      <name>mailbox</name>
+    </include>
 
-
-      <!-----First Shelf from Fuel Website----->
-      <include>
-        <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/SquareShelf</uri>
-        <pose>-2.4 -4.0 0.05 0 0 -1.5708</pose>
-        <name>shelf1</name>
-      </include>
-
-
-      <!-----Second Shelf from Fuel Website----->
-      <include>
-        <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/SquareShelf</uri>
-        <pose>-2.4 -3.2 0.05 0 0 -1.5708</pose>
-        <name>shelf2</name>
-      </include>
-
-
-      <!-----Mailbox from Fuel Website----->
-      <include>
-        <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Mailbox</uri>
-        <pose>3.8 3.8 0.05 0 0 -1.5708</pose>
-        <name>mailbox</name>
-      </include>
-
-
-      <!-- Hatchback models commented out — textures missing from local Fuel cache
-      <include>
-        <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Hatchback</uri>
-        <pose>1.2 1.3 0.05 0 0 0</pose>
-        <name>car1</name>
-      </include>
-      <include>
-        <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Hatchback</uri>
-        <pose>1.2 -1.2 0.05 0 0 0</pose>
-        <name>car2</name>
-      </include>
-      -->
-
-   </model>
+    <!-- Hatchback models commented out — textures missing from local Fuel cache
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Hatchback</uri>
+      <pose>1.2 1.3 0.05 0 0 0</pose>
+      <name>car1</name>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Hatchback</uri>
+      <pose>1.2 -1.2 0.05 0 0 0</pose>
+      <name>car2</name>
+    </include>
+    -->
 
   </world>
 </sdf>

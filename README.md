@@ -2,9 +2,10 @@
 
 ---
 
-## Setup
+## 1.Setup
 Install all dependencies on a fresh machine.
 ```bash
+source install/setup.bash
 bash ~/dev_ws/my_bot/setup.sh
 ```
 
@@ -12,7 +13,7 @@ bash ~/dev_ws/my_bot/setup.sh
 
 ## Cheat Sheet
 
-### Build
+### 2.Build
 Compile the package and make changes take effect.
 ```bash
 cd ~/dev_ws
@@ -20,7 +21,7 @@ colcon build --symlink-install
 source install/setup.bash
 ```
 
-### Simulation
+### 3.Simulation
 Launch Gazebo, spawn the robot, start the ROS-Gazebo bridge, and open RViz — all in one command.
 ```bash
 ros2 launch my_bot launch_sim.launch.py
@@ -30,7 +31,34 @@ ros2 launch my_bot launch_sim.launch.py world:=test_arena
 ros2 launch my_bot launch_sim.launch.py world:=project_map1
 ros2 launch my_bot launch_sim.launch.py world:=project_map2
 ros2 launch my_bot launch_sim.launch.py world:=project_map3
+
+### Teleop
+Drive the robot manually from the keyboard. Open RViz alongside to monitor the robot.
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+
+### Controller
+
+ros2 launch my_bot joystick.launch.py
+
+
 ```
+
+### Demo Mode
+'''
+#real Robot Demo
+
+
+
+
+
+#Sim Robot Demo
+
+
+
+
+
+
  
 ### Real Robot
 Run on physical hardware with the D500 LiDAR connected via USB.
@@ -39,14 +67,23 @@ sudo chmod 666 /dev/ttyUSB0
 ros2 launch my_bot launch_robot.launch.py
 ```
 
-### Teleop
-Drive the robot manually from the keyboard. Open RViz alongside to monitor the robot.
-```bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
+
+
+
+
 
 # Open RViz with the robot config (works on any machine)
 rviz2 -d $(ros2 pkg prefix my_bot)/share/my_bot/config/view_bot.rviz
+ 
 ```
+### Controler
+'''
+#test controller
+evtest
+jstest-gtk
+jstest /dev/input/js0
+#Run Ros
+
 
 ### Camera View
 View the robot's camera feed using rqt.

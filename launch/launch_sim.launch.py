@@ -63,16 +63,34 @@ def launch_setup(context, *args, **kwargs):
         output='screen'
     )
 
-    # Publish odom -> base_link TF
-    odom_to_tf = Node(
-        package='my_bot',
-        executable='odom_to_tf.py',
-        parameters=[{'use_sim_time': True}],
-        output='screen'
-    )
+    # odom_to_tf disabled — diff_cont (ros2_control) publishes odom TF directly
+    # odom_to_tf = Node(
+    #     package='my_bot',
+    #     executable='odom_to_tf.py',
+    #     parameters=[{'use_sim_time': True}],
+    #     output='screen'
+    # )
 
     # Delay spawn so world finishes loading first
     spawn_entity_delayed = TimerAction(period=3.0, actions=[spawn_entity])
+
+    # gz_ros2_control loads+configures controllers from YAML — spawners just activate them
+    diff_drive_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['diff_cont'],
+        output='screen'
+    )
+
+    joint_broad_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['joint_broad'],
+        output='screen'
+    )
+
+    diff_drive_spawner_delayed = TimerAction(period=10.0, actions=[diff_drive_spawner])
+    joint_broad_spawner_delayed = TimerAction(period=10.0, actions=[joint_broad_spawner])
 
     return [
         rsp,
@@ -80,7 +98,8 @@ def launch_setup(context, *args, **kwargs):
         rviz,
         spawn_entity_delayed,
         bridge,
-        odom_to_tf,
+        diff_drive_spawner_delayed,
+        joint_broad_spawner_delayed,
     ]
 
 
