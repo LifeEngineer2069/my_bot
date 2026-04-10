@@ -1,10 +1,10 @@
 ## ROS Robot Package for Cyber Waster
 
 ---
-
-## 1.Setup
+## Setup
 Install all dependencies on a fresh machine.
 ```bash
+cd ~/dev_ws
 source install/setup.bash
 bash ~/dev_ws/my_bot/setup.sh
 ```
@@ -27,18 +27,21 @@ Launch Gazebo, spawn the robot, start the ROS-Gazebo bridge, and open RViz — a
 ros2 launch my_bot launch_sim.launch.py
 
 # Pick a world
-ros2 launch my_bot launch_sim.launch.py world:=test_arena
+cd ~/dev_ws && ros2 launch my_bot launch_sim.launch.py world:=test_arena
 ros2 launch my_bot launch_sim.launch.py world:=project_map1
 ros2 launch my_bot launch_sim.launch.py world:=project_map2
 ros2 launch my_bot launch_sim.launch.py world:=project_map3
+```
 
 ### Teleop
 Drive the robot manually from the keyboard. Open RViz alongside to monitor the robot.
 ```bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_cont/cmd_vel_unstamped
+```
 
 ### Controller
 
+```bash
 ros2 launch my_bot joystick.launch.py
 
 
