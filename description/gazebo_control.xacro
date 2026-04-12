@@ -6,14 +6,14 @@
                 name="ignition::gazebo::systems::DiffDrive">
 
             <!-- Wheels -->
-            <left_joint>right_wheel_joint</left_joint>
-            <right_joint>left_wheel_joint</right_joint>
+            <left_joint>left_wheel_joint</left_joint>
+            <right_joint>right_wheel_joint</right_joint>
             <wheel_separation>0.184</wheel_separation>
             <wheel_radius>0.0425</wheel_radius>
 
             <!-- Limits -->
             <max_wheel_torque>100</max_wheel_torque>
-            <max_linear_velocity>10</max_linear_velocity>
+            <max_linear_velocity>100</max_linear_velocity>
 
             <!-- Topics -->
             <topic>cmd_vel</topic>

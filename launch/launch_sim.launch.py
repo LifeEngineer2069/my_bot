@@ -22,14 +22,19 @@ def launch_setup(context, *args, **kwargs):
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory(package_name), 'launch', 'rsp.launch.py'
-                )]), launch_arguments={'use_sim_time': 'true'}.items()
+                )]), launch_arguments={'use_sim_time': 'true', 'use_ros2_control': 'true'}.items()
     )
+
+    gazebo_params_file = os.path.join(get_package_share_directory(package_name), 'config', 'gazebo_params.yaml')
 
     # Single combined Gazebo process — ogre (not ogre2) avoids NvMapMemAlloc crash on Jetson
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')]),
-                launch_arguments={'gz_args': '-r --render-engine ogre ' + world_file}.items(),
+                launch_arguments={
+                    'gz_args': '-r --render-engine ogre ' + world_file,
+                    'extra_gazebo_args': '--ros-args --params-file ' + gazebo_params_file
+                }.items()
              )
 
     # RViz
