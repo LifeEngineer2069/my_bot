@@ -1,3 +1,7 @@
+# SIMULATION launch — Ignition Gazebo + RViz + ros_gz_bridge
+# use_ros2_control:=false → gazebo_control.xacro (Ignition native DiffDrive plugin)
+# For real robot use: launch_robot.launch2.py
+
 import os
 
 from ament_index_python.packages import get_package_share_directory

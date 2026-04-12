@@ -1,6 +1,20 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
+    <!--
+    CONTROL MODE SWITCH
+    ═══════════════════
+    use_ros2_control:=true  → real robot (diffdrive_arduino Arduino hardware plugin)
+                              uses: ros2_control.xacro
+                              launch: launch_robot.launch2.py
+
+    use_ros2_control:=false → simulation (Ignition Gazebo native DiffDrive plugin)
+                              uses: gazebo_control.xacro
+                              launch: launch_sim.launch.py
+
+    This argument is set automatically by the launch files — you do not need to set it manually.
+    -->
+
     <xacro:arg name="use_ros2_control" default="true"/>
 
     <xacro:include filename="robot_core.xacro"/>
