@@ -18,7 +18,26 @@ from launch_ros.parameter_descriptions import ParameterValue
 from launch.substitutions import Command
 
 
+def _check_device(path, label):
+    if not os.path.exists(path):
+        raise RuntimeError(
+            f'\n\n'
+            f'  DEVICE NOT FOUND: {path} ({label})\n'
+            f'  Is the hardware plugged in?\n'
+            f'  Fix: sudo chmod 666 /dev/ttyUSB0 /dev/ttyACM0\n'
+        )
+    if not os.access(path, os.R_OK | os.W_OK):
+        raise RuntimeError(
+            f'\n\n'
+            f'  PERMISSION DENIED: {path} ({label})\n'
+            f'  Fix: sudo chmod 666 /dev/ttyUSB0 /dev/ttyACM0\n'
+        )
+
+
 def launch_setup(context, *args, **kwargs):
+
+    _check_device('/dev/ttyACM0', 'Arduino / drive controller')
+    _check_device('/dev/ttyUSB0', 'D500 LiDAR')
 
     package_name = 'my_bot'
 
@@ -34,7 +53,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     robot_description = ParameterValue(
-        Command(['xacro ', xacro_file, ' use_ros2_control:=true']),
+        Command(['xacro ', xacro_file, ' use_ros2_control:=true sim_mode:=false']),
         value_type=str
     )
 

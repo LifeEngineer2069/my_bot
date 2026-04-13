@@ -6,15 +6,15 @@ joy_node:
 
 teleop_node:
   ros__parameters:
-    axis_linear: 
-      x: 0.25
-    scale_linear: 
+    axis_linear:
+      x: 1        # left stick vertical (axis index, must be integer)
+    scale_linear:
       x: 0.25
     scale_linear_turbo:
-      x: .5
+      x: 0.5
 
     axis_angular:
-      yaw: 0
+      yaw: 0      # left stick horizontal (axis index, must be integer)
     scale_angular:
       yaw: -0.25
     scale_angular_turbo:

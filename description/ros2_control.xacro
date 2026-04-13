@@ -69,7 +69,7 @@
         <plugin filename="libign_ros2_control-system.so"
                 name="ign_ros2_control::IgnitionROS2ControlPlugin">
             <parameters>$(find my_bot)/config/my_controller.yaml</parameters>
-            <parameters>$(find my_bot)/config/gaz_ros2_ctl_use_sim</parameters>
+            <parameters>$(find my_bot)/config/gaz_ros2_ctl_use_sim.yaml</parameters>
         </plugin>
     </gazebo>
 

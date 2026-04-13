@@ -7,13 +7,14 @@
 | | Simulation | Real Robot |
 |---|---|---|
 | **Launch file** | `launch_sim.launch.py` | `launch_robot.launch2.py` |
-| **Control plugin** | Ignition Gazebo DiffDrive (native) | `diffdrive_arduino` via ros2_control |
-| **URDF loaded** | `gazebo_control.xacro` | `ros2_control.xacro` |
-| **`use_ros2_control`** | `false` (set automatically) | `true` (set automatically) |
+| **Control plugin** | `gz_ros2_control` (Gazebo hardware) | `diffdrive_arduino` via ros2_control |
+| **URDF loaded** | `ros2_control.xacro` (`sim_mode:=true`) | `ros2_control.xacro` |
+| **`use_ros2_control`** | `true` (set automatically) | `true` (set automatically) |
 | **LiDAR** | Simulated in Gazebo | D500 on `/dev/ttyUSB0` |
+| **Camera** | Simulated in Gazebo | gscam auto-launched (`/dev/video0`) |
 | **RViz** | Auto-launched | Run manually |
 
-The switch between modes is handled automatically by the launch files via the `use_ros2_control` arg in `description/robot.urdf.xacro`. You never need to change it manually.
+Both modes use ros2_control. The hardware plugin differs: simulation uses `gz_ros2_control` (Gazebo hardware interface); real robot uses `diffdrive_arduino` (Arduino serial). The correct plugin is selected automatically via `use_ros2_control:=true` and `sim_mode` (derived from `use_sim_time`) passed to xacro — you never need to change this manually.
 
 ---
 
@@ -29,18 +30,9 @@ source install/setup.bash
 
 ---
 
-## Build
-Compile the package and make changes take effect.
-```bash
-cd ~/dev_ws
-colcon build --symlink-install
-source install/setup.bash
-```
-
----
-
 ## Simulation
-Launch Gazebo, spawn the robot, start the ROS-Gazebo bridge, and open RViz — all in one command.
+
+**Terminal 1 — sim core** (Gazebo + RViz + bridge + controllers — all in one)
 ```bash
 # Default world (test_arena)
 ros2 launch my_bot launch_sim.launch.py
@@ -54,11 +46,20 @@ ros2 launch my_bot launch_sim.launch.py world:=project_map2
 ros2 launch my_bot launch_sim.launch.py world:=project_map3
 ```
 
+**Terminal 2 — drive** (pick one)
+```bash
+# Keyboard
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_cont/cmd_vel_unstamped
+
+# Gamepad (hold button 6 to enable, button 7 for turbo)
+ros2 launch my_bot joystick.launch.py
+```
+
 ---
 
 ## Real Robot
 
-**Terminal 1 — robot core** (LiDAR + drive system + ros2_control)
+**Terminal 1 — robot core** (LiDAR + drive system + ros2_control + camera)
 ```bash
 sudo chmod 666 /dev/ttyUSB0 /dev/ttyACM0
 ros2 launch my_bot launch_robot.launch2.py
@@ -78,7 +79,7 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/di
 ros2 launch my_bot joystick.launch.py
 ```
 
-**Terminal 4 — camera** (optional)
+**Terminal 4 — camera viewer** (optional, camera node is auto-launched in Terminal 1)
 ```bash
 ros2 run rqt_image_view rqt_image_view
 ```
@@ -105,6 +106,9 @@ ros2 launch my_bot joystick.launch.py
 View the robot's camera feed.
 ```bash
 ros2 run rqt_image_view rqt_image_view
+
+gst-launch-1.0 nvarguscamerasrc sensor-id=1 !   'video/x-raw(memory:NVMM),width=1280,height=720,framerate=60/1' !   nvvidconv ! 'video/x-raw,format=BGRx' !   videoconvert ! autovideosink
+
 ```
 
 ---
