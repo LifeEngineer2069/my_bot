@@ -110,10 +110,10 @@ ros2 run rqt_image_view rqt_image_view
 
 Test the raw GStreamer pipeline directly (bypass ROS):
 ```bash
-# v4l2 raw Bayer — works on this system (nvarguscamerasrc does NOT work, OOT kernel missing /dev/dma_heap)
-gst-launch-1.0 v4l2src device=/dev/video0 ! \
-  video/x-raw,format=RG10,width=1280,height=720,framerate=60/1 ! \
-  videoconvert ! autovideosink
+# Hardware ISP pipeline - uses nvarguscamerasrc (JetPack 6.1)
+gst-launch-1.0 nvarguscamerasrc sensor-id=0 ! \
+  'video/x-raw(memory:NVMM),width=1280,height=720,framerate=30/1' ! \
+  nvvidconv ! videoconvert ! autovideosink
 
 # List available formats
 v4l2-ctl --list-formats-ext -d /dev/video0
@@ -136,6 +136,12 @@ ros2 topic echo /scan --field ranges --once
 ros2 launch my_bot rsp.launch.py use_sim_time:=true
 ros2 run joint_state_publisher_gui joint_state_publisher_gui
 rviz2 -d $(ros2 pkg prefix my_bot)/share/my_bot/config/view_bot.rviz
+
+#cam
+gst-launch-1.0 nvarguscamerasrc sensor-id=0 ! 'video/x-raw(memory:NVMM),width=1280,height=720,framerate=60/1' ! nvvidconv ! videoconvert ! autovideosink
+
+
+
 ```
 
 ---
