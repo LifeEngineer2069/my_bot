@@ -103,12 +103,20 @@ ros2 launch my_bot joystick.launch.py
 ---
 
 ## Camera
-View the robot's camera feed.
+View the robot's camera feed (camera node auto-starts with `launch_robot.launch2.py`).
 ```bash
 ros2 run rqt_image_view rqt_image_view
+```
 
-gst-launch-1.0 nvarguscamerasrc sensor-id=1 !   'video/x-raw(memory:NVMM),width=1280,height=720,framerate=60/1' !   nvvidconv ! 'video/x-raw,format=BGRx' !   videoconvert ! autovideosink
+Test the raw GStreamer pipeline directly (bypass ROS):
+```bash
+# v4l2 raw Bayer — works on this system (nvarguscamerasrc does NOT work, OOT kernel missing /dev/dma_heap)
+gst-launch-1.0 v4l2src device=/dev/video0 ! \
+  video/x-raw,format=RG10,width=1280,height=720,framerate=60/1 ! \
+  videoconvert ! autovideosink
 
+# List available formats
+v4l2-ctl --list-formats-ext -d /dev/video0
 ```
 
 ---

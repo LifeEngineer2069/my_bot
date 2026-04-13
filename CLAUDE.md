@@ -62,7 +62,7 @@ rviz2 -d $(ros2 pkg prefix my_bot)/share/my_bot/config/view_bot.rviz
 |---|---|---|
 | Drive | Arduino Nano on `/dev/ttyACM0` | `diffdrive_arduino` plugin, 57600 baud, open-loop PWM, no encoders |
 | LiDAR | D500 (LDROBOT STL-19P) on `/dev/ttyUSB0` | `ldlidar_stl_ros2` driver, 230400 baud, frame: `laser_frame` |
-| Camera | CSI (ArduCam IMX219) at `/dev/video0` | `gscam` node, v4l2src → nvvidconv pipeline, auto-launched in real robot mode |
+| Camera | CSI (ArduCam IMX219) at `/dev/video0` | `gscam` node, v4l2src → videoconvert pipeline (nvvidconv cannot handle RG10 from v4l2), auto-launched in real robot mode |
 
 ## Architecture
 

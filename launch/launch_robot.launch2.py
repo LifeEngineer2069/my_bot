@@ -108,8 +108,6 @@ def launch_setup(context, *args, **kwargs):
             'gscam_config': (
                 'v4l2src device=/dev/video0 ! '
                 'video/x-raw,format=RG10,width=1280,height=720,framerate=60/1 ! '
-                'nvvidconv ! '
-                'video/x-raw,format=BGRx ! '
                 'videoconvert ! '
                 'video/x-raw,format=RGB'
             ),
