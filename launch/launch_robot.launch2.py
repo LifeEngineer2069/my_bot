@@ -107,7 +107,7 @@ def launch_setup(context, *args, **kwargs):
             'frame_id': 'camera_link_optical',
             'gscam_config': (
                 'nvarguscamerasrc sensor-id=0 ! '
-                'video/x-raw(memory:NVMM),width=1280,height=720,framerate=30/1 ! '
+                'video/x-raw(memory:NVMM),width=1280,height=720,framerate=15/1 ! '
                 'nvvidconv ! '
                 'queue max-size-buffers=1 leaky=2 ! '
                 'videoconvert ! '

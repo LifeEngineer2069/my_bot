@@ -112,7 +112,7 @@ Test the raw GStreamer pipeline directly (bypass ROS):
 ```bash
 # Hardware ISP pipeline - uses nvarguscamerasrc (JetPack 6.1)
 gst-launch-1.0 nvarguscamerasrc sensor-id=0 ! \
-  'video/x-raw(memory:NVMM),width=1280,height=720,framerate=30/1' ! \
+  'video/x-raw(memory:NVMM),width=1280,height=720,framerate=15/1' ! \
   nvvidconv ! videoconvert ! autovideosink
 
 # List available formats
@@ -138,7 +138,7 @@ ros2 run joint_state_publisher_gui joint_state_publisher_gui
 rviz2 -d $(ros2 pkg prefix my_bot)/share/my_bot/config/view_bot.rviz
 
 #cam
-gst-launch-1.0 nvarguscamerasrc sensor-id=0 ! 'video/x-raw(memory:NVMM),width=1280,height=720,framerate=60/1' ! nvvidconv ! videoconvert ! autovideosink
+gst-launch-1.0 nvarguscamerasrc sensor-id=0 ! 'video/x-raw(memory:NVMM),width=1280,height=720,framerate=15/1' ! nvvidconv ! videoconvert ! autovideosink
 
 
 
