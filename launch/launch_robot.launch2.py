@@ -2,6 +2,12 @@
 # use_ros2_control:=true → ros2_control.xacro (Arduino hardware plugin)
 # For simulation use: launch_sim.launch.py
 
+# ── Toggle ────────────────────────────────────────────────────────────────────
+SIMULATED_ODOM = True    # True  = wheel_animator (dead-reckoned, no encoders)
+                         # False = joint_state_broadcaster (real encoder feedback)
+ODOM_SCALE     = 1.0     # Tune if wheels spin too fast/slow in RViz (e.g. 0.5 = half speed)
+# ─────────────────────────────────────────────────────────────────────────────
+
 import os
 
 from ament_index_python.packages import get_package_share_directory
@@ -80,20 +86,20 @@ def launch_setup(context, *args, **kwargs):
         package='controller_manager',
         executable='spawner',
         arguments=['joint_broad'],
-        output='screen'
+        output='screen',
+    )
+
+    wheel_animator = Node(
+        package='my_bot',
+        executable='wheel_animator.py',
+        output='screen',
+        parameters=[{'odom_scale': ODOM_SCALE}],
     )
 
     delayed_diff_drive_spawner = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=controller_manager,
             on_start=[diff_drive_spawner],
-        )
-    )
-
-    delayed_joint_broad_spawner = RegisterEventHandler(
-        event_handler=OnProcessStart(
-            target_action=controller_manager,
-            on_start=[joint_broad_spawner],
         )
     )
 
@@ -137,13 +143,20 @@ def launch_setup(context, *args, **kwargs):
         ]
     )
 
+    joint_state_node = wheel_animator if SIMULATED_ODOM else RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=controller_manager,
+            on_start=[joint_broad_spawner],
+        )
+    )
+
     return [
         rsp,
         ldlidar,
         camera,
         delayed_controller_manager,
         delayed_diff_drive_spawner,
-        delayed_joint_broad_spawner,
+        joint_state_node,
     ]
 
 

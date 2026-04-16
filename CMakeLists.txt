@@ -38,7 +38,9 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
-install(PROGRAMS scripts/odom_to_tf.py
+install(PROGRAMS
+  scripts/odom_to_tf.py
+  scripts/wheel_animator.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
