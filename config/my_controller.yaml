@@ -19,3 +19,19 @@ diff_cont:
     wheel_radius: 0.0425
     use_stamped_vel: false
     publish_odom_tf: true
+
+    # Velocity limits (match joystick scale values)
+    linear.x.has_velocity_limits: true
+    linear.x.max_velocity: 0.12
+    linear.x.min_velocity: -0.12
+    angular.z.has_velocity_limits: true
+    angular.z.max_velocity: 0.19
+    angular.z.min_velocity: -0.19
+
+    # Acceleration limits — 0.5 s ramp (accel = max_vel / 0.5)
+    linear.x.has_acceleration_limits: true
+    linear.x.max_acceleration: 0.24
+    linear.x.min_acceleration: -0.24
+    angular.z.has_acceleration_limits: true
+    angular.z.max_acceleration: 0.38
+    angular.z.min_acceleration: -0.38
