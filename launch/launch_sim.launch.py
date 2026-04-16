@@ -67,7 +67,7 @@ def launch_setup(context, *args, **kwargs):
             '/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
             '/scan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
             '/camera@sensor_msgs/msg/Image[ignition.msgs.Image',
-            '/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo',
+            '/camera/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo',
         ],
         output='screen'
     )

@@ -41,7 +41,7 @@
                 </clip>
             </camera>
             <gz_frame_id>camera_link_optical</gz_frame_id>
-            <visualize>true</visualize>
+            <visualize>false</visualize>
         </sensor>
     </gazebo>
 

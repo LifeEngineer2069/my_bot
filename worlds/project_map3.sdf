@@ -1,23 +1,42 @@
 <?xml version="1.0" ?>
-<sdf version="1.7">
+<sdf version="1.9">
 
-  <world name="CyberWaster_Sim2">
+  <world name="CyberWaster_Sim3">
 
-    <!-----Physics----->
-    <plugin filename="libignition-gazebo-physics-system.so"
+    <!-- Required system plugins — must use short filename (no lib prefix / .so suffix) -->
+    <plugin filename="ignition-gazebo-physics-system"
             name="ignition::gazebo::systems::Physics"/>
-
-    <plugin filename="libignition-gazebo-scene-broadcaster-system.so"
+    <plugin filename="ignition-gazebo-user-commands-system"
+            name="ignition::gazebo::systems::UserCommands"/>
+    <plugin filename="ignition-gazebo-scene-broadcaster-system"
             name="ignition::gazebo::systems::SceneBroadcaster"/>
+    <!-- ogre2 required server-side for gpu_lidar; GUI uses --render-engine ogre separately -->
+    <plugin filename="ignition-gazebo-sensors-system"
+            name="ignition::gazebo::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
 
-    <!-----Sun Light----->
+    <gravity>0 0 -9.8</gravity>
+    <atmosphere type='adiabatic'/>
+    <physics type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>true</shadows>
+    </scene>
+
+    <!-- Sun Light -->
     <light type="directional" name="sun">
       <pose>0 0 10 0 0 0</pose>
       <diffuse>1 1 1 1</diffuse>
       <direction>-0.5 0.1 -0.9</direction>
     </light>
 
-    <!-----Ground Plane----->
+    <!-- Ground Plane (warm reddish-brown — office carpet/tile) -->
     <model name="ground_floor">
       <static>true</static>
       <link name="link">
@@ -25,22 +44,17 @@
           <geometry>
             <plane>
               <normal>0 0 1</normal>
-              <!-----9 x 9 floor----->
               <size>9 9</size>
             </plane>
           </geometry>
         </collision>
-
         <visual name="visual">
           <geometry>
             <plane>
               <normal>0 0 1</normal>
-              <!-----9 x 9 floor----->
               <size>9 9</size>
             </plane>
           </geometry>
-
-          <!-----Color of floor----->
           <material>
             <ambient>0.30 0.14 0.10 1</ambient>
             <diffuse>0.30 0.14 0.10 1</diffuse>
@@ -50,28 +64,17 @@
       </link>
     </model>
 
-
-    <!----------Walls around 9x9 area---------->
-
+    <!-- Walls around 9x9 area -->
     <model name="map_walls">
       <static>true</static>
 
-      <!-----West Wall----->
       <link name="west_wall">
         <pose>0 4.55 0.5 0 0 0</pose>
         <collision name="collision">
-          <geometry>
-            <box>
-              <size>9 0.1 1.0</size>
-            </box>
-          </geometry>
+          <geometry><box><size>9 0.1 1.0</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry>
-            <box>
-              <size>9 0.1 1.0</size>
-            </box>
-          </geometry>
+          <geometry><box><size>9 0.1 1.0</size></box></geometry>
           <material>
             <ambient>0.96 0.90 0.75 1</ambient>
             <diffuse>0.96 0.90 0.75 1</diffuse>
@@ -80,24 +83,13 @@
         </visual>
       </link>
 
-      <!-----East Wall----->
       <link name="east_wall">
         <pose>0 -4.55 0.5 0 0 0</pose>
         <collision name="collision">
-          <geometry>
-            <box>
-              <size>9 0.1 1.0</size>
-            </box>
-          </geometry>
+          <geometry><box><size>9 0.1 1.0</size></box></geometry>
         </collision>
-
         <visual name="visual">
-          <geometry>
-            <box>
-              <size>9 0.1 1.0</size>
-            </box>
-          </geometry>
-
+          <geometry><box><size>9 0.1 1.0</size></box></geometry>
           <material>
             <ambient>0.96 0.90 0.75 1</ambient>
             <diffuse>0.96 0.90 0.75 1</diffuse>
@@ -105,23 +97,14 @@
           </material>
         </visual>
       </link>
- 
-      <!-----North Wall----->
+
       <link name="north_wall">
         <pose>4.55 -0.7 0.5 0 0 0</pose>
         <collision name="collision">
-          <geometry>
-            <box>
-              <size>0.1 7.8 1.0</size>
-            </box>
-          </geometry>
+          <geometry><box><size>0.1 7.8 1.0</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry>
-            <box>
-              <size>0.1 7.8 1.0</size>
-            </box>
-          </geometry>
+          <geometry><box><size>0.1 7.8 1.0</size></box></geometry>
           <material>
             <ambient>0.96 0.90 0.75 1</ambient>
             <diffuse>0.96 0.90 0.75 1</diffuse>
@@ -130,22 +113,13 @@
         </visual>
       </link>
 
-      <!-----South Wall----->
       <link name="south_wall">
         <pose>-4.55 0 0.5 0 0 0</pose>
         <collision name="collision">
-          <geometry>
-            <box>
-              <size>0.1 9 1.0</size>
-            </box>
-          </geometry>
+          <geometry><box><size>0.1 9 1.0</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry>
-            <box>
-              <size>0.1 9 1.0</size>
-            </box>
-          </geometry>
+          <geometry><box><size>0.1 9 1.0</size></box></geometry>
           <material>
             <ambient>0.96 0.90 0.75 1</ambient>
             <diffuse>0.96 0.90 0.75 1</diffuse>
@@ -155,404 +129,166 @@
       </link>
     </model>
 
+    <!-- Reception Desk (L-shaped) — inline geometry only, no nested includes -->
+    <!-- Model pose: -2.1 3.0 -0.2 0 0 1.57 -->
+    <model name="reception_desk">
+      <static>true</static>
+      <pose>-2.1 3.0 -0.2 0 0 1.57</pose>
 
-      <!----------Reception Desk Area (L shaped)---------->
-      <model name="reception_desk">
-        <static>true</static>
-        <pose>-2.1 3.0 -0.2 0 0 1.57</pose>
-
-        <!-----Long side of desk----->
-        <link name="long_side">
-          <pose>0 0 0.5 0 0 0</pose>
-
-          <collision name="collision">
-            <geometry>
-              <box>
-                <size>3.0 0.7 0.5</size>
-              </box>
-            </geometry>
-          </collision>
-
-          <visual name="visual">
-            <geometry>
-              <box>
-                <size>3.0 0.7 0.5</size>
-              </box>
-            </geometry>
-
-            <material>
-              <ambient>0.24 0.12 0.08 1</ambient>
-              <diffuse>0.24 0.12 0.08 1</diffuse>
-              <specular>0.05 0.05 0.05 1</specular>
-            </material>
-          </visual>
-        </link>
-
-        <!-----Short side of desk----->
-        <link name="short_side">
-          <pose>-1.15 0.70 0.5 0 0 1.57</pose>
-
-          <collision name="collision">
-            <geometry>
-              <box>
-                <size>1.2 0.7 0.5</size>
-              </box>
-            </geometry>
-          </collision>
-
-          <visual name="visual">
-            <geometry>
-              <box>
-                <size>1.2 0.7 0.5</size>
-              </box>
-            </geometry>
-
-            <material>
-              <ambient>0.24 0.12 0.08 1</ambient>
-              <diffuse>0.24 0.12 0.08 1</diffuse>
-              <specular>0.05 0.05 0.05 1</specular>
-            </material>
-          </visual>
-        </link>
-
-         <!-----Computer on desk----->
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard</uri>
-           <pose>0 -0.1 0.75 0 0 -1.57</pose>
-           <name>computer</name>
-         </include>
-
-      </model>
-
-
-
-      <!----------Seating Area 1---------->
-      <model name="seating_area1">
-      <pose>3.2 -3.2 0 0 0 0.78</pose>	
-
-         <!-----Table----->
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/CoffeeTable</uri>
-           <pose>0 0 0.1 0 0 0</pose>
-           <name>table1</name>
-         </include>
-
-         <!-----Chairs----->
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
-           <pose>1 0 0.1 0 0 3.14</pose>
-           <name>chair1</name>
-         </include>
-
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
-           <pose>0 1 0.1 0 0 -1.57</pose>
-           <name>chair2</name>
-         </include>
-
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
-           <pose>0 -1 0.1 0 0 1.57</pose>
-           <name>chair3</name>
-         </include>
-
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
-           <pose>-1 0 0.1 0 0 0</pose>
-           <name>chair4</name>
-         </include>
-
-      </model>
-
-
-      <!----------Seating Area 2---------->
-      <model name="seating_area2">
-      <pose>-0.5 -1.5 0 0 0 0</pose>
-
-         <!-----Table----->
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/CoffeeTable</uri>
-           <pose>0 0 0.1 0 0 0</pose>
-           <name>table2</name>
-         </include>
-
-         <!-----Chairs----->
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
-           <pose>1 0 0.1 0 0 3.14</pose>
-           <name>chair5</name>
-         </include>
-
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
-           <pose>0 1 0.1 0 0 -1.57</pose>
-           <name>chair6</name>
-         </include>
-
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
-           <pose>0 -1 0.1 0 0 1.57</pose>
-           <name>chair7</name>
-         </include>
-
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
-           <pose>-1 0 0.1 0 0 0</pose>
-           <name>chair8</name>
-         </include>
-
-      </model>
-
-
-      <!----------Seating Area 3---------->
-      <model name="seating_area3">
-      <pose>3.2 0.5 0 0 0 0.78</pose>
-
-         <!-----Table----->
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/CoffeeTable</uri>
-           <pose>0 0 0.1 0 0 0</pose>
-           <name>table3</name>
-         </include>
-
-         <!-----Chairs----->
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
-           <pose>1 0 0.1 0 0 3.14</pose>
-           <name>chair9</name>
-         </include>
-
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
-           <pose>0 1 0.1 0 0 -1.57</pose>
-           <name>chair10</name>
-         </include>
-
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
-           <pose>0 -1 0.1 0 0 1.57</pose>
-           <name>chair11</name>
-         </include>
-
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
-           <pose>-1 0 0.1 0 0 0</pose>
-           <name>chair12</name>
-         </include>
-
-      </model>
-
-
-     <!----------Provision Area---------->
-      <model name="provision_area">
-      <pose>-3.8 -3.2 -0.09 0 0 0</pose>
-
-         <!-----Provision Table 1----->
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1</uri>
-           <pose>0 0.5 0.1 0 0 0</pose>
-           <name>pro_table1</name>
-         </include>
-
-         <!-----Provision Table 2----->
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1</uri>
-           <pose>0 2 0.1 0 0 0</pose>
-           <name>pro_table2</name>
-         </include>
-
-         <!-----Drinks----->
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/GoogleResearch/models/FOOD_BEVERAGE_SET</uri>
-           <pose>0 0.5 0.85 0 0 1.57</pose>
-           <name>drink_set1</name>
-         </include>
-
-         <include>
-           <uri>https://fuel.gazebosim.org/1.0/GoogleResearch/models/FOOD_BEVERAGE_SET</uri>
-           <pose>0 2 0.85 0 0 1.57</pose>
-           <name>drink_set2</name>
-         </include>
-
-      </model>
-
-
-/*
-    <!---------------Robot Segment--------------->
-
-    <model name="CyberWaster" canonical_link="chassis">
-
-      <!-----Spawn above ground to avoid clipping----->
-      <pose>-3.8 -3.8 0.15 0 0 0</pose>
-
-      <!----------Chassis---------->
-      <link name="chassis">
-
-        <!-----Chassis positioned at center/above ground----->
-        <pose>0 0 0.12 0 0 0</pose>
-
-        <inertial>
-          <mass>2.0</mass>
-          <inertia>
-            <ixx>0.02</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.02</iyy>
-            <iyz>0</iyz>
-            <izz>0.02</izz>
-          </inertia>
-        </inertial>
-
-        <!-----Chassis scaled smaller to match Fuel trash bin----->
+      <link name="long_side">
+        <pose>0 0 0.5 0 0 0</pose>
+        <collision name="collision">
+          <geometry><box><size>3.0 0.7 0.5</size></box></geometry>
+        </collision>
         <visual name="visual">
-          <geometry>
-            <box>
-              <size>0.7 0.45 0.20</size>
-            </box>
-          </geometry>
-
-          <!-----Color of Chassis----->
+          <geometry><box><size>3.0 0.7 0.5</size></box></geometry>
           <material>
-            <ambient>0.5 0 0 1</ambient>
-            <diffuse>0.5 0 0 1</diffuse>
-            <specular>0.2 0.05 0.05 1</specular>
+            <ambient>0.24 0.12 0.08 1</ambient>
+            <diffuse>0.24 0.12 0.08 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
           </material>
         </visual>
-
-        <!-----For contact with Chassis----->
-        <collision name="collision">
-          <geometry>
-            <box>
-              <size>0.7 0.45 0.20</size>
-            </box>
-          </geometry>
-        </collision>
-
       </link>
 
-      <!-----Left wheel scaled smaller----->
-      <link name="left_wheel">
-
-        <!-----x:placed near the back, y: left side, z: wheel at center height----->
-        <pose relative_to="chassis">-0.20 0.26 0.00 -1.5707 0 0</pose>
-
-        <inertial>
-          <mass>0.3</mass>
-          <inertia>
-            <ixx>0.001</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.001</iyy>
-            <iyz>0</iyz>
-            <izz>0.002</izz>
-          </inertia>
-        </inertial>
-
+      <link name="short_side">
+        <pose>-1.15 0.70 0.5 0 0 1.57</pose>
+        <collision name="collision">
+          <geometry><box><size>1.2 0.7 0.5</size></box></geometry>
+        </collision>
         <visual name="visual">
-          <geometry>
-            <cylinder>
-              <radius>0.12</radius>
-              <length>0.06</length>
-            </cylinder>
-          </geometry>
-
-          <!-----Color of left wheel----->
+          <geometry><box><size>1.2 0.7 0.5</size></box></geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
-            <specular>0.2 0.2 0.2 1</specular>
+            <ambient>0.24 0.12 0.08 1</ambient>
+            <diffuse>0.24 0.12 0.08 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
           </material>
         </visual>
-
-        <collision name="collision">
-          <geometry>
-            <cylinder>
-              <radius>0.12</radius>
-              <length>0.06</length>
-            </cylinder>
-          </geometry>
-        </collision>
-
       </link>
-
-      <!-----Right wheel scaled smaller----->
-      <link name="right_wheel">
-
-        <!-----x:placed near the back, y: right side, z: wheel at center height----->
-        <pose relative_to="chassis">-0.20 -0.26 0.00 -1.5707 0 0</pose>
-
-        <inertial>
-          <mass>0.3</mass>
-          <inertia>
-            <ixx>0.001</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.001</iyy>
-            <iyz>0</iyz>
-            <izz>0.002</izz>
-          </inertia>
-        </inertial>
-
-        <visual name="visual">
-          <geometry>
-            <cylinder>
-              <radius>0.12</radius>
-              <length>0.06</length>
-            </cylinder>
-          </geometry>
-
-          <!-----Color of right wheel----->
-          <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
-            <specular>0.2 0.2 0.2 1</specular>
-          </material>
-        </visual>
-
-        <collision name="collision">
-          <geometry>
-            <cylinder>
-              <radius>0.12</radius>
-              <length>0.06</length>
-            </cylinder>
-          </geometry>
-        </collision>
-
-      </link>
-
-      <!----- Wheel joints ----->
-      <joint name="left_wheel_joint" type="revolute">
-        <parent>chassis</parent>
-        <child>left_wheel</child>
-        <axis>
-          <xyz>0 0 1</xyz>
-        </axis>
-      </joint>
-
-      <joint name="right_wheel_joint" type="revolute">
-        <parent>chassis</parent>
-        <child>right_wheel</child>
-        <axis>
-          <xyz>0 0 1</xyz>
-        </axis>
-      </joint>
-
-      <!-----TrashBin from Fuel Website----->
-      <include>
-        <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/TrashBin</uri>
-        <!-----Placed on top of Chassis----->
-        <pose relative_to="chassis">0 0 0.10 0 0 0</pose>
-        <name>trash_bin</name>
-      </include>
-
-      <!-----Attach the bin to Chassis----->
-      <joint name="bin_fixed_to_chassis" type="fixed">
-        <parent>chassis</parent>
-        <child>trash_bin::body</child>
-      </joint>
-
     </model>
 
-*/
+    <!-- Computer on reception desk -->
+    <!-- World pose computed from reception_desk(-2.1,3.0,-0.2,0,0,1.57) + local(0,-0.1,0.75,0,0,-1.57) -->
+    <!-- Rotate local (0,-0.1) by 1.57 -> (0.1, 0); add parent offset: (-2.0, 3.0, 0.55); rot: 0 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard</uri>
+      <pose>-2.0 3.0 0.55 0 0 0</pose>
+      <name>computer</name>
+    </include>
+
+    <!-- Seating Area 1 — parent was at (3.2,-3.2,0,0,0,0.78), cos=0.710 sin=0.716 -->
+    <!-- table1: local(0,0,0.1) -> world(3.2,-3.2,0.1), rot 0.78 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/CoffeeTable</uri>
+      <pose>3.2 -3.2 0.1 0 0 0.78</pose>
+      <name>table1</name>
+    </include>
+    <!-- chair1: local(1,0) -> rot->(0.710,0.716) + (3.2,-3.2) = (3.910,-2.484), rot 3.92 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
+      <pose>3.910 -2.484 0.1 0 0 3.92</pose>
+      <name>chair1</name>
+    </include>
+    <!-- chair2: local(0,1) -> rot->(-0.716,0.710) + (3.2,-3.2) = (2.484,-2.490), rot -0.79 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
+      <pose>2.484 -2.490 0.1 0 0 -0.79</pose>
+      <name>chair2</name>
+    </include>
+    <!-- chair3: local(0,-1) -> rot->(0.716,-0.710) + (3.2,-3.2) = (3.916,-3.910), rot 2.35 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
+      <pose>3.916 -3.910 0.1 0 0 2.35</pose>
+      <name>chair3</name>
+    </include>
+    <!-- chair4: local(-1,0) -> rot->(-0.710,-0.716) + (3.2,-3.2) = (2.490,-3.916), rot 0.78 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
+      <pose>2.490 -3.916 0.1 0 0 0.78</pose>
+      <name>chair4</name>
+    </include>
+
+    <!-- Seating Area 2 — parent was at (-0.5,-1.5,0,0,0,0), no rotation -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/CoffeeTable</uri>
+      <pose>-0.5 -1.5 0.1 0 0 0</pose>
+      <name>table2</name>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
+      <pose>0.5 -1.5 0.1 0 0 3.14</pose>
+      <name>chair5</name>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
+      <pose>-0.5 -0.5 0.1 0 0 -1.57</pose>
+      <name>chair6</name>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
+      <pose>-0.5 -2.5 0.1 0 0 1.57</pose>
+      <name>chair7</name>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
+      <pose>-1.5 -1.5 0.1 0 0 0</pose>
+      <name>chair8</name>
+    </include>
+
+    <!-- Seating Area 3 — parent was at (3.2,0.5,0,0,0,0.78), cos=0.710 sin=0.716 -->
+    <!-- table3: local(0,0,0.1) -> world(3.2,0.5,0.1), rot 0.78 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/CoffeeTable</uri>
+      <pose>3.2 0.5 0.1 0 0 0.78</pose>
+      <name>table3</name>
+    </include>
+    <!-- chair9: local(1,0) -> (0.710,0.716) + (3.2,0.5) = (3.910,1.216), rot 3.92 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
+      <pose>3.910 1.216 0.1 0 0 3.92</pose>
+      <name>chair9</name>
+    </include>
+    <!-- chair10: local(0,1) -> (-0.716,0.710) + (3.2,0.5) = (2.484,1.210), rot -0.79 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
+      <pose>2.484 1.210 0.1 0 0 -0.79</pose>
+      <name>chair10</name>
+    </include>
+    <!-- chair11: local(0,-1) -> (0.716,-0.710) + (3.2,0.5) = (3.916,-0.210), rot 2.35 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
+      <pose>3.916 -0.210 0.1 0 0 2.35</pose>
+      <name>chair11</name>
+    </include>
+    <!-- chair12: local(-1,0) -> (-0.710,-0.716) + (3.2,0.5) = (2.490,-0.216), rot 0.78 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair</uri>
+      <pose>2.490 -0.216 0.1 0 0 0.78</pose>
+      <name>chair12</name>
+    </include>
+
+    <!-- Provision Area — parent was at (-3.8,-3.2,-0.09,0,0,0), no rotation -->
+    <!-- Provision table z: parent z(-0.09) + local z(0.1) = 0.01 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1</uri>
+      <pose>-3.8 -2.7 0.01 0 0 0</pose>
+      <name>pro_table1</name>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1</uri>
+      <pose>-3.8 -1.2 0.01 0 0 0</pose>
+      <name>pro_table2</name>
+    </include>
+    <!-- drink sets: parent z(-0.09) + local z(0.85) = 0.76 -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/GoogleResearch/models/FOOD_BEVERAGE_SET</uri>
+      <pose>-3.8 -2.7 0.76 0 0 1.57</pose>
+      <name>drink_set1</name>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/GoogleResearch/models/FOOD_BEVERAGE_SET</uri>
+      <pose>-3.8 -1.2 0.76 0 0 1.57</pose>
+      <name>drink_set2</name>
+    </include>
+
   </world>
 </sdf>
