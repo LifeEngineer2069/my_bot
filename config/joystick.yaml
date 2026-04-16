@@ -9,16 +9,17 @@ teleop_node:
     axis_linear:
       x: 1        # left stick vertical (axis index, must be integer)
     scale_linear:
-      x: 0.75
+      x: 0.08
     scale_linear_turbo:
-      x: 1.5
+      x: 0.08
 
     axis_angular:
       yaw: 0      # left stick horizontal (axis index, must be integer)
     scale_angular:
-      yaw: -0.75
+      yaw: -0.19
     scale_angular_turbo:
-      yaw: -1.5
+      yaw: -0.19
+
 
 
     enable_button: 6

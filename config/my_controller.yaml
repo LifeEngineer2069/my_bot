@@ -18,3 +18,4 @@ diff_cont:
     wheel_separation: 0.184
     wheel_radius: 0.0425
     use_stamped_vel: false
+    publish_odom_tf: true

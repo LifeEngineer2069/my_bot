@@ -101,6 +101,19 @@ def launch_setup(context, *args, **kwargs):
     diff_drive_spawner_delayed = TimerAction(period=10.0, actions=[diff_drive_spawner])
     joint_broad_spawner_delayed = TimerAction(period=10.0, actions=[joint_broad_spawner])
 
+    slam_toolbox = Node(
+        package='slam_toolbox',
+        executable='async_slam_toolbox_node',
+        name='slam_toolbox',
+        parameters=[
+            os.path.join(get_package_share_directory(package_name), 'config', 'mapper_params_online_async.yaml'),
+            {'use_sim_time': True}
+        ],
+        output='screen'
+    )
+
+    slam_toolbox_delayed = TimerAction(period=12.0, actions=[slam_toolbox])
+
     return [
         rsp,
         gazebo,
@@ -109,6 +122,7 @@ def launch_setup(context, *args, **kwargs):
         bridge,
         diff_drive_spawner_delayed,
         joint_broad_spawner_delayed,
+        slam_toolbox_delayed,
     ]
 
 
